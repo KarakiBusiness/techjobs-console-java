@@ -10,6 +10,7 @@ import java.io.Reader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by LaunchCode
@@ -46,6 +47,7 @@ public class JobData {
         return values;
     }
 
+    //ran on line ~43
     public static ArrayList<HashMap<String, String>> findAll() {
 
         // load data, if not already loaded
@@ -76,7 +78,7 @@ public class JobData {
 
             String aValue = row.get(column);
 
-            if (aValue.contains(value)) {
+            if (aValue.toUpperCase().contains(value)) {
                 jobs.add(row);
             }
         }
@@ -123,6 +125,31 @@ public class JobData {
             System.out.println("Failed to load job data");
             e.printStackTrace();
         }
+    }
+
+
+    //New Class below:
+    //pass in is a string, and it returns an arraylist of hashmaps
+    public static ArrayList<HashMap<String, String>> findByValue(String value){
+        loadData();
+        //create an arraylist of hashmaps to identify each job
+        ArrayList <HashMap<String, String>> jobs = new ArrayList<>();
+        //each job in all jobs
+        for (HashMap<String, String> keyValuesOfSingleJob: allJobs){
+            // key value pair for each item in each row
+            for (HashMap.Entry<String, String> job: keyValuesOfSingleJob.entrySet()){
+                //if contains add to jobs  if not already contained in keyValue
+                if (value.contains(job.getValue().toUpperCase())) {
+                    //if not already contained in keyValue
+                    if (!jobs.contains(keyValuesOfSingleJob)) {
+                        jobs.add(keyValuesOfSingleJob);
+                    }
+                }
+            }
+        }
+        return jobs;
+
+
     }
 
 }
